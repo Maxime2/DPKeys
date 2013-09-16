@@ -1,12 +1,12 @@
 <?
 /*
-Plugin Name: DPKeys
-Version: 0.02
-Plugin URI: https://github.com/Maxime2/DPKeys
-Author: Maxim Zakharov
-Author URI: http://www.maxime.net.ru/
-Description: DataparkSearch Keywords Plugin, based on WPKeys plugin (http://www.wpkeys.com)
-*/ 
+  Plugin Name: DPKeys
+  Version: 0.02
+  Plugin URI: https://github.com/Maxime2/DPKeys
+  Author: Maxim Zakharov
+  Author URI: http://www.maxime.net.ru/
+  Description: DataparkSearch Keywords Plugin, based on WPKeys plugin (http://www.wpkeys.com)
+*/
 
 define(DPDATABASE,"dp_keys");
 define(DPURLPREFIX,"http://inet-sochi.ru/cgi-bin/search.cgi?tmplt=janus.htm.ru&amp;sp=1&amp;sy=0&amp;s=IRPD&amp;q=");
@@ -20,16 +20,16 @@ function dpkeys_init() {
     dpkeys_create_table();
     
     if(isset($_REQUEST['dpkey_enable'])) {
-	   dp_key_enable();
+	dp_key_enable();
     } elseif (isset($_REQUEST['dpkey_disable'])) {
-	   dp_key_disable();
+	dp_key_disable();
     } elseif (isset($_REQUEST['dpkeys_keywords'])) {
-	   dp_key_add($_REQUEST['dpkeys_keywords']);
+	dp_key_add($_REQUEST['dpkeys_keywords']);
     } elseif (isset($_REQUEST['dpkeys_from_post'])) {
-	   dp_key_add($_REQUEST['dpkeys_from_post']);
+	dp_key_add($_REQUEST['dpkeys_from_post']);
     } elseif (isset($_REQUEST['dpkeys_permalink_structure'])) {
-	   wpupdate_permalink($_REQUEST['dpkeys_permalink_structure']);
-    }    
+	wpupdate_permalink($_REQUEST['dpkeys_permalink_structure']);
+    }
 }
 
 function dpkeys_create_table() {
@@ -67,16 +67,16 @@ function dpkeys_options_page() {
     echo '<a name="main"></a><fieldset class="options"><legend>Main options</legend>';
 
     if(get_option("dpkey_status")==1){
-	    echo '<form name="dpkeys" action="'. $_SERVER["REQUEST_URI"] . '" method="post">';
-	    echo "<strong>DPKey is Enabled</strong>";
-	    echo '<input type="hidden" name="dpkey_disable" />';
+	echo '<form name="dpkeys" action="'. $_SERVER["REQUEST_URI"] . '" method="post">';
+	echo "<strong>DPKey is Enabled</strong>";
+	echo '<input type="hidden" name="dpkey_disable" />';
         echo '<div class="submit"><input type="submit"value="Disable it" /></div>';
-	} else { 
+    } else { 
         echo '<form name="dpkeys" action="'. $_SERVER["REQUEST_URI"] . '" method="post">';
         echo "<strong><font color=red>DPKey is Disabled</font></strong>";
-	    echo '<input type="hidden" name="dpkey_enable" />';
-	    echo '<div class="submit"><input type="submit" value="Enable it" /></div>';
-	}
+	echo '<input type="hidden" name="dpkey_enable" />';
+	echo '<div class="submit"><input type="submit" value="Enable it" /></div>';
+    }
 
     echo "</form>";
     echo "</fieldset>";
@@ -90,12 +90,12 @@ function dpkeys_options_page() {
     if($keywords) echo implode("\n",$keywords);
                          
     echo '</textarea> ';
-	echo '<div class="submit"><input type="submit" name="dpkey_key_add" value="Save Keywords" /></div>';
+    echo '<div class="submit"><input type="submit" name="dpkey_key_add" value="Save Keywords" /></div>';
 	
     echo "</form>\n";          
     echo "</fieldset>";
         
-    $dpperm=get_option("dpkey_permalink");
+    $dpperm = get_option("dpkey_permalink");
     if(!get_option("permalink_structure")) {
         echo '<a name="permalink"></a><fieldset class="keywords"><h3>Permalink Structure</h3>';
         echo '<font color=red>You need specify some at Options -> Permalinks to edit this field</font>';
@@ -109,7 +109,7 @@ function dpkeys_options_page() {
         echo '<a name="permalink"></a><fieldset class="keywords"><h3>Permalink Structure</h3>';
         echo '<form action="'. $_SERVER["REQUEST_URI"] . '" method="post">';
         echo '<input name="dpkeys_permalink_structure" type="text" class="code" style="width: 60%;" value="'.$dpperm.'" size="50" />';
-	    echo '<div class="submit"><input type="submit" value="Save Permalink Structure" /></div>';  
+	echo '<div class="submit"><input type="submit" value="Save Permalink Structure" /></div>';  
         echo "</form>\n";          
         echo "</fieldset>";
     }
@@ -135,7 +135,7 @@ function dp_key_add($tofunc) {
         $wpdb->query($query);
     }
     
-    $array=explode("\n",$tofunc);
+    $array = explode("\n", $tofunc);
     $keywords_array=array();
     foreach($array as $arra) {
         $trimarra = dpto_lower(trim($arra));
@@ -157,7 +157,6 @@ function dpkeys_from_post() {
     echo '<p><label for="dpkeys"> <a href="http://www.wpkeys.com/" title="Help on WPKeys"><strong><font color="red">43n39e.ru Keys</font></strong> Add Keywords</a>:</label> (Separate multiple keywords with line breaks.)<br />';
     echo '<textarea name="dpkeys_from_post" cols="45" rows="3" style="width: 70%; font-size: 12px;" class="code">';    
     echo '</textarea></p>';
-
 }
 
 function dpto_lower($str) {
@@ -168,13 +167,13 @@ function dpto_lower($str) {
 function dpconvert_keywords($text) {
     global $id, $wp_disabled;
     $offset= 0;
-   
+    
     if($wp_disabled) return $text;   
     
     $len = strlen($text); //--- 
     $lowertext = dpto_lower($text);
     
- 	if(get_option("dpkey_status")==1) {
+    if(get_option("dpkey_status")==1) {
         if($keywords=get_post_meta($id, DPKEYS_META, true)) {
             $kk = explode("\n",$keywords);
             $permlink = DPURLPREFIX;       
@@ -197,16 +196,16 @@ function dpconvert_keywords($text) {
 		$pos1 = strpos($stop,'</a>',0);
 		$pos2 = strpos($stop,'<a ',0);
 		if ( (($pos2 === false) && ($pos1 === false)) || (($pos1 != false) && ($pos2 != false) && ($pos1 > $pos2)) ) { 
-                	if((is_dpkeys_keyword() != $fraze)) {
-	                    $link='<a rel="nofollow" href="'.$permlink.$fraze.'" title="search 43n39e.ru on topic '.$fraze.'">'.$samtext.'</a>';
-        	        } else {
-                	    $link="<b>$samtext</b>";
-	                } 
+		    if((is_dpkeys_keyword() != $fraze)) {
+			$link='<a rel="nofollow" href="'.$permlink.$fraze.'" title="search 43n39e.ru on topic '.$fraze.'">'.$samtext.'</a>';
+		    } else {
+			$link="<b>$samtext</b>";
+		    } 
 		} else {
-			$link = $samtext;
+		    $link = $samtext;
 		}
                 
-                $text=$start.$link.$stop;
+                $text = $start.$link.$stop;
                 $offset += strlen($link) - $flen;
             }
         }
@@ -221,65 +220,65 @@ function wpupdate_permalink($someurl){
 }
 
 function wpadd_mod_rules($rules){
-	return $rules;
+    return $rules;
 }
 
 function dpkeys_mod_revrite($rewrite) {
-	global $wp_rewrite;
-	$perm=get_option("dpkey_permalink");
-	$keytag_token = '%'.$perm.'%';
-	$wp_rewrite->add_rewrite_tag($keytag_token, '(.+)', 'dpkeys=');
-	$keywords_structure = $wp_rewrite->root . "$perm/$keytag_token";
-	$keywords_rewrite = $wp_rewrite->generate_rewrite_rules($keywords_structure);	
-	return ( $rewrite + $keywords_rewrite );
+    global $wp_rewrite;
+    $perm=get_option("dpkey_permalink");
+    $keytag_token = '%'.$perm.'%';
+    $wp_rewrite->add_rewrite_tag($keytag_token, '(.+)', 'dpkeys=');
+    $keywords_structure = $wp_rewrite->root . "$perm/$keytag_token";
+    $keywords_rewrite = $wp_rewrite->generate_rewrite_rules($keywords_structure);	
+    return ( $rewrite + $keywords_rewrite );
 }
 
 function dpkeys_keywords_parseQuery(){
-	if (is_dpkeys_keyword()) {
-		global $wp_query;
-		$wp_query->is_single = false;
-		$wp_query->is_page = false;
-		$wp_query->is_archive = false;
-		$wp_query->is_search = false;
-		$wp_query->is_home = false;
+    if (is_dpkeys_keyword()) {
+	global $wp_query;
+	$wp_query->is_single = false;
+	$wp_query->is_page = false;
+	$wp_query->is_archive = false;
+	$wp_query->is_search = false;
+	$wp_query->is_home = false;
 		
-		add_filter('posts_where', 'dpkeys_postsWhere');
-		add_filter('posts_join', 'dpkeys_postsJoin');
-		add_action('template_redirect', 'dpkeys_includeTemplate');
-	}
+	add_filter('posts_where', 'dpkeys_postsWhere');
+	add_filter('posts_join', 'dpkeys_postsJoin');
+	add_action('template_redirect', 'dpkeys_includeTemplate');
+    }
 }
 
 function dpkeys_postsWhere($where) {
     global $wp_version;
     $keyword = is_dpkeys_keyword();
     $where .= " AND dpkeys_meta.meta_key = '" . DPKEYS_META . "' ";
-	$where .= " AND dpkeys_meta.meta_value LIKE '%" . $keyword . "%' ";
+    $where .= " AND dpkeys_meta.meta_value LIKE '%" . $keyword . "%' ";
     $where = str_replace(' AND (post_status = "publish"', ' AND ((post_status = \'static\' OR post_status = \'publish\')', $where);
-	return ($where);
+    return ($where);
 }
 
 
 function dpkeys_includeTemplate() {
     if (is_dpkeys_keyword()) {
-	   $template = get_category_template();
-	   if($template) load_template($template);
+	$template = get_category_template();
+	if($template) load_template($template);
     }
 }
 
 function dpkeys_postsJoin($join) {
-	global $wpdb;
-	$join .= " LEFT JOIN $wpdb->postmeta AS dpkeys_meta ON ($wpdb->posts.ID = dpkeys_meta.post_id) ";
-	return ($join);
+    global $wpdb;
+    $join .= " LEFT JOIN $wpdb->postmeta AS dpkeys_meta ON ($wpdb->posts.ID = dpkeys_meta.post_id) ";
+    return ($join);
 }
 
 function is_dpkeys_keyword() {
     global $wp_version;
     $keyword = ( isset($wp_version) && ($wp_version >= 2.0) ) ? 
-                get_query_var(DPKEYWORDS_QUERYVAR) : 
-                $GLOBALS[DPKEYWORDS_QUERYVAR];
-	if (!is_null($keyword) && ($keyword != '')){
-		return $keyword;
-	} else return false;
+	get_query_var(DPKEYWORDS_QUERYVAR) : 
+	$GLOBALS[DPKEYWORDS_QUERYVAR];
+    if (!is_null($keyword) && ($keyword != '')){
+	return $keyword;
+    } else return false;
 }
 
 function dpkeys_addQueryVar($dpvar_array){
@@ -299,7 +298,7 @@ function dpkeys_save($id) {
     
     $wp_disabled = true;
     $posttext = apply_filters('the_content', $posttext);
-		
+    
     $posttext = str_replace(']]>', ']]&gt;', $posttext);
     $posttext = dpoff_tags($posttext);
    
@@ -347,18 +346,18 @@ foreach ($keywords as $key)
 //mb_internal_encoding('UTF-8');
 //mb_regex_encoding('UTF-8');
 
-$thispostkeywords = array();
-foreach($keywords as $key) {
-    if (preg_match('/(?<![\\w\x80-\xFF])'.preg_quote($key,'/').'(?![\\w\x80-\xFF])/',$posttext,
-	$regs,PREG_OFFSET_CAPTURE)) $thispostkeywords[]=array($key,$regs[0][1]);
-}
-
+	$thispostkeywords = array();
+	foreach($keywords as $key) {
+	    if (preg_match('/(?<![\\w\x80-\xFF])'.preg_quote($key,'/').'(?![\\w\x80-\xFF])/',$posttext,
+			   $regs,PREG_OFFSET_CAPTURE)) $thispostkeywords[]=array($key,$regs[0][1]);
+	}
+	
 
 //if (preg_match_all("/(?<![\\w\x80-\xFF])($tmp)(?![\\w\x80-\xFF])/i",$posttext,$regs,PREG_OFFSET_CAPTURE))
 //        $thispostkeywords=$regs[0];
     
         
-        $skoko=count($thispostkeywords);
+        $skoko = count($thispostkeywords);
         for ($i=0;$i<$skoko;$i++) {
             if(!$thispostkeywords[$i][0]) continue; 
             for ($j=0; $j<$skoko; $j++) {
@@ -372,7 +371,7 @@ foreach($keywords as $key) {
         
         usort($thispostkeywords, "dpcmp");
         
-        $nash=array();
+        $nash = array();
         
         foreach ($thispostkeywords as $kkk){
             if($kkk[0]!='') {
@@ -382,7 +381,7 @@ foreach($keywords as $key) {
         }
         
         
-        $tobase=addslashes(implode("\n",$nash));
+        $tobase = addslashes(implode("\n",$nash));
         if(!get_post_meta($id, DPKEYS_META, true)) {
             if($tobase) $wpdb->query("INSERT IGNORE INTO $wpdb->postmeta (post_id,meta_key,meta_value) VALUES ('$id', '".DPKEYS_META."' , '$tobase')");
         } else {
@@ -391,14 +390,13 @@ foreach($keywords as $key) {
             } else {
                 $wpdb->query("delete from $wpdb->postmeta where meta_key='".DPKEYS_META."' and post_id=$id");
             }
-            
-      }
-   }
+	}
+    }
 }
 
 function dpcmp($a, $b) {
-   if ($a[1] == $b[1]) return 0;
-   return ($a[1] < $b[1]) ? -1 : 1;
+    if ($a[1] == $b[1]) return 0;
+    return ($a[1] < $b[1]) ? -1 : 1;
 }
 
 function dpkeys_post($post) {    
@@ -411,23 +409,23 @@ function dpkeys_post($post) {
 }
 
 function dpoff_tags($posttext) {
-	$posttext=strtolower($posttext);
-	$offset=0;
-	while ( ($start_link=strpos ( $posttext, "<", $offset))!==false ) {
-		if ( $posttext[$start_link + 1]=='a') { 
-			$end_link=strpos($posttext, "</a>", $start_link);
-			$end_link += 4;
-		} else {
-		    $end_link=strpos($posttext, ">", $start_link);
+    $posttext=strtolower($posttext);
+    $offset=0;
+    while ( ($start_link=strpos ( $posttext, "<", $offset))!==false ) {
+	if ( $posttext[$start_link + 1]=='a') { 
+	    $end_link=strpos($posttext, "</a>", $start_link);
+	    $end_link += 4;
+	} else {
+	    $end_link=strpos($posttext, ">", $start_link);
             $end_link += 1;
-		}
-        
-		$len=$end_link-$start_link;
-        $new_link = str_repeat('*',$len);
-        $posttext=substr($posttext, 0, $start_link).$new_link.substr($posttext, $end_link);
-		$offset=$end_link;
 	}
-	return $posttext;
+        
+	$len =$end_link - $start_link;
+        $new_link = str_repeat('*',$len);
+        $posttext = substr($posttext, 0, $start_link).$new_link.substr($posttext, $end_link);
+	$offset = $end_link;
+    }
+    return $posttext;
 }
 
 
